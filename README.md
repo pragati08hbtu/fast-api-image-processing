@@ -41,7 +41,11 @@ This project is a FastAPI-based system designed to efficiently process image dat
 
 4. **Set up Redis:**
 
-    Install Redis for your system and start the Redis server.
+    Install Docker and run the following command to start Redis in Docker.
+
+    ```bash
+    docker run --name redis -d -p 6379:6379 redis
+    ```
 
 5. **Configure environment variables:**
 
