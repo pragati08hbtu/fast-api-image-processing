@@ -1,0 +1,5 @@
+/output_images
+/venv
+.env
+*.db
+__pycache__
