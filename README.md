@@ -4,13 +4,18 @@ This project is a FastAPI-based system designed to efficiently process image dat
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Running the Project](#running-the-project)
-- [High-Level Design](#High-level-design)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [Asynchronous Worker Functions](#asynchronous-worker-functions)
-- [License](#license)
+-   [Installation](#installation)
+-   [Running the Project](#running-the-project)
+-   [Technical Design Document](#technical-design-document)
+    -   [System Diagram](#system-diagram)
+    -   [Component Descriptions](#component-descriptions)
+        -   [Image Processing Service Interaction](#image-processing-service-interaction)
+        -   [Webhook Handling](#webhook-handling)
+        -   [Database Interaction](#database-interaction)
+-   [Database Schema](#database-schema)
+-   [API Endpoints](#api-endpoints)
+-   [Asynchronous Worker Functions](#asynchronous-worker-functions)
+-   [License](#license)
 
 ## Installation
 
@@ -59,15 +64,35 @@ This project is a FastAPI-based system designed to efficiently process image dat
 
 2. **Run asynchronous workers:**
 
-    Start the celery worker process:
+    Start the Celery worker process:
 
     ```bash
     celery -A main.celery worker --loglevel=info
     ```
 
-## High-Level Design
+## Technical Design Document
 
-Following is a high-level design of the project: ![high-level-design](https://github.com/pragati08hbtu/fast-api-image-processing/blob/main/high-level-design.png?raw=true)
+Following is a high-level design of the project:
+
+![high-level-design](https://github.com/pragati08hbtu/fast-api-image-processing/blob/main/high-level-design.png?raw=true)
+
+### Component Descriptions
+
+#### Image Processing API
+
+This service handles the incoming requests for image processing. It validates the CSV content, updates the database with the request details and enqueues the CSV data to Redis message broker and returns the request id to the user. It also contains a status endpoint to return the image processing status from the database.
+
+#### Redis Message Queue
+
+This serves as a message broker to faciliate asynchronous communication between Image Processing API and Celery Worker Service.
+
+#### Celery Worker Service
+
+This service runs continuously in the background and picks up the messages from Redis for image processing. It then fetches images from URLs, compresses them, and stores them in the database. It also updates the database with the status of each image processing request. It additionally calls an optional webhook URL from the request details to notify external clients about completion status.
+
+#### Database Interaction
+
+The application uses SQLite to store the status of processing requests, input image URLs, and output image paths. The database is designed to ensure that each processing request and its associated data are tracked efficiently.
 
 ## Database Schema
 
@@ -75,31 +100,31 @@ Following is a high-level design of the project: ![high-level-design](https://gi
 
 1. **`image_processing_requests`**
 
-    | Column          | Type    | Description                                  |
-    |-----------------|---------|----------------------------------------------|
-    | `id`            | Integer | Primary Key                                  |
-    | `request_id`    | String  | Unique Key                                   |
-    | `status`        | String  | Status of the processing (`Pending`, `Failed`, `Completed`) |
-    | `output_csv`    | Text    | Contains the output CSV file as text         |
-    | `webhook_url`   | String  | Optional webhook URL to notify on completion |
+    | Column        | Type    | Description                                                 |
+    | ------------- | ------- | ----------------------------------------------------------- |
+    | `id`          | Integer | Primary Key                                                 |
+    | `request_id`  | String  | Unique Key                                                  |
+    | `status`      | String  | Status of the processing (`Pending`, `Failed`, `Completed`) |
+    | `output_csv`  | Text    | Contains the output CSV file as text                        |
+    | `webhook_url` | String  | Optional webhook URL to notify on completion                |
 
 ## API Endpoints
 
 ### **1. Upload CSV**
 
-- **URL**: `/upload/`
-- **Method**: `POST`
-- **Description**: Accepts a CSV file, validates the formatting, and returns a unique request ID.
+-   **URL**: `/upload/`
+-   **Method**: `POST`
+-   **Description**: Accepts a CSV file, validates the formatting, and returns a unique request ID.
 
 ### **2. Check Status**
 
-- **URL**: `/status/{request_id}/`
-- **Method**: `GET`
-- **Description**: Allows users to query the processing status using the request ID.
+-   **URL**: `/status/{request_id}/`
+-   **Method**: `GET`
+-   **Description**: Allows users to query the processing status using the request ID.
 
 ### **3. Webhook Notification**
 
-- **Description**: (Optional) After processing all images, a webhook endpoint can be triggered with the results.
+-   **Description**: (Optional) After processing all images, a webhook endpoint can be triggered with the results.
 
 ## Asynchronous Worker Functions
 
@@ -107,11 +132,11 @@ Following is a high-level design of the project: ![high-level-design](https://gi
 
 The asynchronous worker function for processing images is implemented using Celery. It performs the following tasks:
 
-- **Fetch Images**: Downloads images from the provided URLs.
-- **Compress Images**: Reduces the image size by 50% of the original quality using the PIL library.
-- **Save Locally**: Stores the processed images locally and updates the output URLs in the database.
-- **Update Status**: Updates the processing status in the database.
-- **Trigger Webhook**: If a webhook URL is provided, the function will send a POST request to the webhook with the processing results.
+-   **Fetch Images**: Downloads images from the provided URLs.
+-   **Compress Images**: Reduces the image size by 50% of the original quality using the PIL library.
+-   **Save Locally**: Stores the processed images locally and updates the output URLs in the database.
+-   **Update Status**: Updates the processing status in the database.
+-   **Trigger Webhook**: If a webhook URL is provided, the function will send a POST request to the webhook with the processing results.
 
 ## License
 
