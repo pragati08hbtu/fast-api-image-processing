@@ -6,6 +6,7 @@ This project is a FastAPI-based system designed to efficiently process image dat
 
 - [Installation](#installation)
 - [Running the Project](#running-the-project)
+- [High-Level Design](#High-level-design)
 - [Database Schema](#database-schema)
 - [API Endpoints](#api-endpoints)
 - [Asynchronous Worker Functions](#asynchronous-worker-functions)
@@ -63,6 +64,10 @@ This project is a FastAPI-based system designed to efficiently process image dat
     ```bash
     celery -A main.celery worker --loglevel=info
     ```
+
+## High-Level Design
+
+Following is a high-level design of the project: ![high-level-design](https://github.com/pragati08hbtu/fast-api-image-processing/blob/main/high-level-design.png?raw=true)
 
 ## Database Schema
 
