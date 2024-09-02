@@ -117,7 +117,7 @@ The application uses SQLite to store the status of processing requests, input im
 
 API documentation is available at: http://20.244.98.113/docs.
 
-Postman Collection: ![postman-collection](https://github.com/pragati08hbtu/fast-api-image-processing/blob/main/fast_api_image_processing.postman_collection?raw=true)
+Postman Collection: ![postman-collection](https://github.com/pragati08hbtu/fast-api-image-processing/blob/main/fast_api_image_processing.postman_collection)
 
 ## API Endpoints
 
