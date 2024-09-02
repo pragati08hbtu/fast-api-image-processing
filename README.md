@@ -13,6 +13,7 @@ This project is a FastAPI-based system designed to efficiently process image dat
         -   [Webhook Handling](#webhook-handling)
         -   [Database Interaction](#database-interaction)
 -   [Database Schema](#database-schema)
+-   [API Documentation](#api-documentation)
 -   [API Endpoints](#api-endpoints)
 -   [Asynchronous Worker Functions](#asynchronous-worker-functions)
 -   [License](#license)
@@ -111,6 +112,12 @@ The application uses SQLite to store the status of processing requests, input im
     | `status`      | String  | Status of the processing (`Pending`, `Failed`, `Completed`) |
     | `output_csv`  | Text    | Contains the output CSV file as text                        |
     | `webhook_url` | String  | Optional webhook URL to notify on completion                |
+
+## API Documentation
+
+API documentation is available at: http://20.244.98.113/docs.
+
+Postman Collection: ![postman-collection](https://github.com/pragati08hbtu/fast-api-image-processing/blob/main/fast_api_image_processing.postman_collection?raw=true)
 
 ## API Endpoints
 

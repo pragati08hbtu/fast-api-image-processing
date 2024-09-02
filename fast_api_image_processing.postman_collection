@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "ab3aad82-c761-45af-88bf-9107044dca9e",
+		"name": "FastAPI Image Processing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14165537"
+	},
+	"item": [
+		{
+			"name": "upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "image_urls.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://20.244.98.113/upload",
+					"protocol": "http",
+					"host": [
+						"20",
+						"244",
+						"98",
+						"113"
+					],
+					"path": [
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://20.244.98.113/status/44c4a90a-868c-4290-b25c-4000d3a70f40",
+					"protocol": "http",
+					"host": [
+						"20",
+						"244",
+						"98",
+						"113"
+					],
+					"path": [
+						"status",
+						"44c4a90a-868c-4290-b25c-4000d3a70f40"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
