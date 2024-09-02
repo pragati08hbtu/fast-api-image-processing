@@ -1,0 +1,7 @@
+venv
+.env
+.git
+.gitignore
+high-level-design.png
+image_urls.csv
+README.md
